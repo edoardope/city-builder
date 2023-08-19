@@ -9,8 +9,11 @@ export default {
         }
     },
     methods: {
-        changetile(index) {
-            console.log(store.tilesInfo[index].type)
+        tileInfo(index) {
+            store.tilesInfo[index].TooltipOpen = true
+        },
+        tileInfoClose(index) {
+            store.tilesInfo[index].TooltipOpen = false
         }
     },
     created() {
@@ -20,6 +23,13 @@ export default {
 
             store.tilesInfo.push({
                 type: randomType,
+                pollutionLeve: 0,
+                structure: "",
+                fertylity: 100,
+                powered: 0,
+                burning: false,
+                polluted: false,
+                TooltipOpen: false
             });
         }
     },
@@ -29,7 +39,13 @@ export default {
 <template>
     <div id="GameCont">
         <div class="GameTile" v-for="(tile, index) in store.tilesInfo" :key="index" :class="tile.type"
-            @click="this.changetile(index)">
+            @mouseenter="this.tileInfo(index)" @mouseleave="this.tileInfoClose(index)">
+            <div class="Tooltip" v-if="tile.TooltipOpen">
+                <span class="text-white">
+                    {{ tile.type }}
+                </span>
+            </div>
+
 
         </div>
     </div>
@@ -37,7 +53,7 @@ export default {
 
 <style lang="scss" scoped>
 #GameCont {
-    width: 95%;
+    width: 90%;
     height: 95%;
     display: flex;
     flex-wrap: wrap;
@@ -68,6 +84,16 @@ export default {
 
     .inactive {
         background-color: red;
+    }
+
+    .Tooltip {
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 999; // Assicurati che sia al di sopra delle altre caselle
+        pointer-events: none; // Permette al click di passare attraverso il tooltip
     }
 }
 

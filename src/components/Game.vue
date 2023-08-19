@@ -1,7 +1,7 @@
 <script>
 import WorldMap from './map/WorldMap.vue';
 import Hud from './hud/Hud.vue';
-import { store } from '../store.js'
+import { store as vuexStore } from '../store.js'
 
 export default {
   name: "Game",
@@ -11,25 +11,29 @@ export default {
   },
   data() {
     return {
-      store
+      vuexStore, // Cambia il nome qui
     }
   },
   methods: {
-    save() {
-      const tilesInfoJSON = JSON.stringify(store.tilesInfo);
-      localStorage.setItem('savedTilesInfo', tilesInfoJSON);
-      console.log('game saved')
-    },
-    load() {
-      // Quando l'utente desidera caricare una partita salvata
-      const savedTilesInfoJSON = localStorage.getItem('savedTilesInfo');
-      if (savedTilesInfoJSON) {
-        const loadedTilesInfo = JSON.parse(savedTilesInfoJSON);
+    CurrentTime() {
+      setInterval(() => {
+        // Incrementa i secondi
+        this.vuexStore.seconds++;
 
-        store.tilesInfo = loadedTilesInfo;
-        console.log('game loaded')
-      }
+        // Aggiorna minuti e ore se necessario
+        if (this.vuexStore.seconds >= 60) {
+          this.vuexStore.seconds = 0;
+          this.vuexStore.minutes++;
+        }
+        if (this.vuexStore.minutes >= 60) {
+          this.vuexStore.minutes = 0;
+          this.vuexStore.hours++;
+        }
+      }, 1000); // Ogni secondo
     }
+  },
+  mounted() {
+    this.CurrentTime();
   }
 }
 </script>
@@ -37,9 +41,7 @@ export default {
 <template>
   <main>
     <WorldMap />
-    <Hud v-if="false" />
-    <span class="text-white" @click="save()">save</span>
-    <span class="text-white" @click="load()">load</span>
+    <Hud />
   </main>
 </template>
 
