@@ -1,11 +1,11 @@
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Game from './components/Game.vue'
 import { store } from './store.js';
 
 export default {
   name: "App",
   components: {
-    HelloWorld,
+    Game,
   },
   data() {
     return {
@@ -21,7 +21,7 @@ export default {
 </script>
 
 <template>
-  <HelloWorld />
+  <Game />
 </template>
 
 <style lang="scss">
