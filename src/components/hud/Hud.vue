@@ -7,6 +7,7 @@ export default {
             seconds: "",
             minutes: "",
             hours: "",
+            ToggleInfoStatus: "text-white"
         }
     },
     methods: {
@@ -39,6 +40,15 @@ export default {
                 store.hours = loadedHours;
                 console.log('game loaded');
             }
+        },
+        ToggleInfoView() {
+            if (!store.infoView) {
+                store.infoView = true;
+                this.ToggleInfoStatus = "text-danger"
+            } else {
+                store.infoView = false;
+                this.ToggleInfoStatus = "text-white"
+            }
         }
     },
     mounted() {
@@ -55,6 +65,8 @@ export default {
     <div id="hudInterface">
         <span class="text-white" @click="save()">save</span>
         <span class="text-white" @click="load()">load</span>
+        <span :class="ToggleInfoStatus" @click="ToggleInfoView()">Toggle info</span>
+        <span class="text-white">Current time:</span>
         <span class="text-white">{{ this.hours.toString().padStart(2, '0') }}:{{ this.minutes.toString().padStart(2, '0')
         }}:{{ this.seconds.toString().padStart(2, '0') }}</span>
     </div>

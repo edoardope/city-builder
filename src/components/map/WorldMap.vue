@@ -10,7 +10,9 @@ export default {
     },
     methods: {
         tileInfo(index) {
-            store.tilesInfo[index].TooltipOpen = true
+            if (store.infoView) {
+                store.tilesInfo[index].TooltipOpen = true
+            }
         },
         tileInfoClose(index) {
             store.tilesInfo[index].TooltipOpen = false
@@ -24,10 +26,10 @@ export default {
             store.tilesInfo.push({
                 type: randomType,
                 pollutionLeve: 0,
-                structure: "",
+                structure: "none",
                 fertylity: 100,
                 powered: 0,
-                burning: false,
+                burning: "no",
                 polluted: false,
                 TooltipOpen: false
             });
@@ -41,9 +43,14 @@ export default {
         <div class="GameTile" v-for="(tile, index) in store.tilesInfo" :key="index" :class="tile.type"
             @mouseenter="this.tileInfo(index)" @mouseleave="this.tileInfoClose(index)">
             <div class="Tooltip" v-if="tile.TooltipOpen">
-                <span class="text-white">
-                    {{ tile.type }}
-                </span>
+                <div class="text-white">
+                    <span>terrain: {{ tile.type }}</span><br>
+                    <span>fertility: {{ tile.fertylity }}%</span><br>
+                    <span>pollution: {{ tile.polluted }}%</span><br>
+                    <span>power level: {{ tile.powered }}%</span><br>
+                    <span>burning: {{ tile.burning }}</span><br>
+                    <span>building: {{ tile.structure }}</span>
+                </div>
             </div>
 
 
