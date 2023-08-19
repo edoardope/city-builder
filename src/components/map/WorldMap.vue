@@ -1,10 +1,11 @@
 <script>
-
+import { store } from '../../store';
 export default {
     name: "WorldMap",
     data() {
         return {
-            TilesNumber: 3700
+            store,
+            TilesNumber: 3700,
         }
     },
     methods: {

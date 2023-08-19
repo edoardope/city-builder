@@ -13,6 +13,21 @@ export default {
 }
 </script>
 
-<template></template>
+<template>
+    <div id="hudInterface">
 
-<style lang="scss" scoped></style>
+    </div>
+</template>
+
+<style lang="scss" scoped>
+#hudInterface {
+    position: absolute;
+    border: 1px solid red;
+    width: 95%;
+    height: 95%;
+    margin: 0;
+    padding: 0;
+    max-width: 2000px;
+    max-height: 1000px;
+}
+</style>

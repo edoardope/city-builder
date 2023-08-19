@@ -1,10 +1,12 @@
 <script>
 import WorldMap from './map/WorldMap.vue';
+import Hud from './hud/Hud.vue';
 
 export default {
   name: "Game",
   components: {
-    WorldMap
+    WorldMap,
+    Hud
   },
   data() {
     return {
@@ -20,6 +22,7 @@ export default {
 <template>
   <main>
     <WorldMap />
+    <Hud />
   </main>
 </template>
 
