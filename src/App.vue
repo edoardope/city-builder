@@ -1,5 +1,5 @@
 <script>
-import Game from './components/Game.vue'
+import Game from './components/Game.vue';
 import { store } from './store.js';
 
 export default {

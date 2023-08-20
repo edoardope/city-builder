@@ -4,15 +4,30 @@ export default {
     name: "Hud",
     data() {
         return {
+            hudOpen: true,
             gameStarted: "",
             seconds: "",
             minutes: "",
             hours: "",
+            money: 0,
+            population: 0,
+            rock: 0,
+            coal: 0,
             ToggleInfoStatus: "text-white",
-            ToggleGrid: "text-white"
+            ToggleGrid: "text-white",
+            TogleBuildMenuVis: false,
+            BuildMenuColor: "text-white",
+            miniera: "text-white"
         }
     },
     methods: {
+        hudTogle() {
+            if (this.hudOpen) {
+                this.hudOpen = false
+            } else {
+                this.hudOpen = true
+            }
+        },
         save() {
             const tilesInfoJSON = JSON.stringify(store.tilesInfo);
             const currentSeconds = JSON.stringify(this.seconds);
@@ -24,6 +39,11 @@ export default {
             localStorage.setItem('savedHours', currentHours);
 
             console.log('game saved');
+
+            store.error = "game saved"
+            setTimeout(() => {
+                store.error = ""
+            }, 3000); // dopo 3 secondi
         },
         load() {
             store.gameStarted = true;
@@ -101,7 +121,10 @@ export default {
                     skin: skin,
                     type: randomType,
                     pollutionLevel: 0,
-                    structure: "none",
+                    structure: {
+                        name: "none",
+                        createdAt: ""
+                    },
                     fertylity: 100,
                     powered: 0,
                     burning: "no",
@@ -118,7 +141,10 @@ export default {
                     skin: "erbosa",
                     type: "erbosa",
                     pollutionLevel: 0,
-                    structure: "none",
+                    structure: {
+                        name: "none",
+                        createdAt: ""
+                    },
                     fertylity: 100,
                     powered: 0,
                     burning: "no",
@@ -139,6 +165,28 @@ export default {
         },
         start() {
             store.gameStarted = true
+        },
+        build(edificio) {
+            store.SelectedBuilding = edificio;
+            store.mode = "build";
+        },
+        TogleBuildMenu() {
+            if (this.TogleBuildMenuVis === false) {
+                this.TogleBuildMenuVis = true
+                this.BuildMenuColor = "text-danger"
+            } else {
+                this.TogleBuildMenuVis = false
+                this.BuildMenuColor = "text-white"
+                store.mode = ""
+            }
+        },
+        TogleMineVis() {
+            if (this.miniera === 'text-white') {
+                this.miniera = 'text-danger'
+            } else {
+                this.miniera = 'text-white'
+                store.SelectedBuilding = ''
+            }
         }
     },
     mounted() {
@@ -147,32 +195,56 @@ export default {
             this.seconds = store.seconds;
             this.minutes = store.minutes;
             this.hours = store.hours;
+            this.money = store.money;
+            this.population = store.totalPop;
+            this.rock = store.rock;
+            this.coal = store.coal;
         }, 1000); // Ogni secondo
     }
 }
 </script>
 
 <template>
-    <div id="hudInterface">
-        <span class="text-white" @click="save()">save</span>
-        <span class="text-white" @click="load()">load</span>
+    <div class="openHud">
+        <span class="text-white" @click="hudTogle()">Toggle Hud</span>
+        <span v-if="hudOpen" :class="ToggleInfoStatus" @click="ToggleInfoView()">Toggle info</span>
+        <span v-if="hudOpen" :class="this.ToggleGrid" @click="ToggleGridView()">Toggle grid</span>
+        <span v-if="hudOpen" class="text-white" @click="save()">save</span>
+        <span v-if="hudOpen" class="text-white" @click="load()">load</span>
+    </div>
+    <div v-if="hudOpen" id="preStart">
         <span class="text-white" v-if="!this.gameStarted" @click="makeRandomTerrain()">random terrain</span>
         <span class="text-white" v-if="!this.gameStarted" @click="resetTerrain()">reset terrain</span>
         <span class="text-white" v-if="!this.gameStarted" @click="start()">start</span>
-        <span :class="ToggleInfoStatus" @click="ToggleInfoView()">Toggle info</span>
-        <span :class="this.ToggleGrid" @click="ToggleGridView()">Toggle grid</span>
-        <div v-if="this.gameStarted" class="d-flex align-items-center flex-column">
+    </div>
+    <div id="hudInterface" v-if="hudOpen">
+        <div id="clock" v-if="this.gameStarted" class="d-flex align-items-center flex-column">
             <span class="text-white">Current time:</span>
             <span class="text-white">{{ this.hours.toString().padStart(2, '0') }}:{{ this.minutes.toString().padStart(2,
                 '0')
             }}:{{ this.seconds.toString().padStart(2, '0') }}</span>
+        </div>
+        <div id="buildingMenuCont">
+            <span :class="this.BuildMenuColor" @click="TogleBuildMenu()">buildings menu</span>
+            <div v-if="TogleBuildMenuVis" class="buildingsMenu">
+                <img src="../../../public/miniera.png" alt="">
+                <span :class="this.miniera" @click="build('miniera'), TogleMineVis()">
+                    miniera</span>
+            </div>
+        </div>
+        <div class="gameStatPannel text-white">
+            <span>pop: {{ this.population }}</span>
+            <span>money: {{ this.money }}</span>
+            <span>rock: {{ this.rock }}</span>
+            <span>coal: {{ this.coal }}</span>
+
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
 #hudInterface {
-    border: 1px solid red;
+
     width: 10%;
     height: 95%;
     margin: 0;
@@ -182,5 +254,51 @@ export default {
     display: flex;
     align-items: center;
     flex-direction: column;
+    position: absolute;
+    right: 0px;
+    font-weight: 700;
+
+
+    .gameStatPannel {
+        position: absolute;
+        display: flex;
+        bottom: 0px;
+        right: 20px;
+        width: 300px;
+        justify-content: space-between;
+    }
+
+    #clock {
+        position: absolute;
+        top: 0;
+        width: 100px;
+        right: 20px;
+    }
+
+    #buildingMenuCont {
+        position: absolute;
+        bottom: 30px;
+        right: 120px;
+        width: 200px;
+    }
+}
+
+#preStart {
+    font-weight: 700;
+    position: absolute;
+    flex-direction: column;
+    display: flex;
+    left: 10px;
+}
+
+.openHud {
+    z-index: 999999;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    font-weight: 700;
+    display: flex;
+    width: 400px;
+    justify-content: space-between;
 }
 </style>

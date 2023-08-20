@@ -16,6 +16,26 @@ export default {
         },
         tileInfoClose(index) {
             store.tilesInfo[index].TooltipOpen = false
+        },
+        interact(index) {
+            //costruzione edifici
+            if (store.mode === 'build') {
+                if (store.SelectedBuilding === 'miniera' && store.tilesInfo[index].type === 'roccioso') {
+                    store.tilesInfo[index].structure.name = 'mine'
+                    store.tilesInfo[index].structure.createdAt = `${store.hours}:${store.minutes}:${store.seconds}`
+                    store.tilesInfo[index].skin = 'mine'
+                    if (store.tilesInfo[index].resourceDeposit === 'carbone') {
+                        store.coalMineNumber++
+                    } else {
+                        store.rockMineNumber++
+                    }
+                } else if (store.SelectedBuilding === 'miniera') {
+                    store.error = "Edificio posizionabile solo su terreno roccioso"
+                    setTimeout(() => {
+                        store.error = ""
+                    }, 3000); // dopo 3 secondi
+                }
+            }
         }
     },
     created() {
@@ -27,7 +47,9 @@ export default {
                 skin: "erbosa",
                 type: "erbosa",
                 pollutionLevel: 0,
-                structure: "none",
+                structure: {
+                    name: "none"
+                },
                 fertylity: 100,
                 powered: 0,
                 burning: "no",
@@ -46,8 +68,11 @@ export default {
 
 <template>
     <div id="GameCont">
+        <div v-if="store.error" class="ErrorDisplay text-danger">
+            {{ store.error }}
+        </div>
         <div class="GameTile" v-for="(tile, index) in store.tilesInfo" :key="index" :class="tile.skin, store.grid"
-            @mouseenter="this.tileInfo(index)" @mouseleave="this.tileInfoClose(index)">
+            @mouseenter="this.tileInfo(index)" @mouseleave="this.tileInfoClose(index)" @click="interact(index)">
             <div class="Tooltip" v-if="tile.TooltipOpen">
                 <div class="text-white">
                     <span>terrain: {{ tile.type }}</span><br>
@@ -55,7 +80,7 @@ export default {
                     <span>pollution: {{ tile.pollutionLevel }}%</span><br>
                     <span>power level: {{ tile.powered }}%</span><br>
                     <span>burning: {{ tile.burning }}</span><br>
-                    <span>building: {{ tile.structure }}</span><br>
+                    <span>building: {{ tile.structure.name }}</span><br>
                     <span>resource: {{ tile.resourceDeposit }}</span>
                 </div>
             </div>
@@ -67,8 +92,9 @@ export default {
 
 <style lang="scss" scoped>
 #GameCont {
-    width: 90%;
-    height: 95%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-wrap: wrap;
     overflow: auto;
@@ -78,10 +104,27 @@ export default {
     max-width: 2000px;
     max-height: 1000px;
 
+    .ErrorDisplay {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.8);
+        border-radius: 5px;
+    }
+
     .GameTile {
         // border: 1px solid black;
-        flex-basis: calc(100% / 100);
+        flex-basis: calc(100% / 80);
         aspect-ratio: 1;
+    }
+
+    .mine {
+        background-image: url(../../../public/miniera.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        background-color: #b1d354;
     }
 
     .erbosa {
