@@ -8,8 +8,15 @@ export default {
             seconds: "",
             minutes: "",
             hours: "",
+            money: 0,
+            population: 0,
+            rock: 0,
+            coal: 0,
             ToggleInfoStatus: "text-white",
-            ToggleGrid: "text-white"
+            ToggleGrid: "text-white",
+            TogleBuildMenuVis: false,
+            BuildMenuColor: "text-white",
+            miniera: "text-white"
         }
     },
     methods: {
@@ -24,6 +31,11 @@ export default {
             localStorage.setItem('savedHours', currentHours);
 
             console.log('game saved');
+
+            store.error = "game saved"
+            setTimeout(() => {
+                store.error = ""
+            }, 3000); // dopo 3 secondi
         },
         load() {
             store.gameStarted = true;
@@ -101,7 +113,10 @@ export default {
                     skin: skin,
                     type: randomType,
                     pollutionLevel: 0,
-                    structure: "none",
+                    structure: {
+                        name: "none",
+                        createdAt: ""
+                    },
                     fertylity: 100,
                     powered: 0,
                     burning: "no",
@@ -118,7 +133,10 @@ export default {
                     skin: "erbosa",
                     type: "erbosa",
                     pollutionLevel: 0,
-                    structure: "none",
+                    structure: {
+                        name: "none",
+                        createdAt: ""
+                    },
                     fertylity: 100,
                     powered: 0,
                     burning: "no",
@@ -139,6 +157,28 @@ export default {
         },
         start() {
             store.gameStarted = true
+        },
+        build(edificio) {
+            store.SelectedBuilding = edificio;
+            store.mode = "build";
+        },
+        TogleBuildMenu() {
+            if (this.TogleBuildMenuVis === false) {
+                this.TogleBuildMenuVis = true
+                this.BuildMenuColor = "text-danger"
+            } else {
+                this.TogleBuildMenuVis = false
+                this.BuildMenuColor = "text-white"
+                store.mode = ""
+            }
+        },
+        TogleMineVis() {
+            if (this.miniera === 'text-white') {
+                this.miniera = 'text-danger'
+            } else {
+                this.miniera = 'text-white'
+                store.SelectedBuilding = ''
+            }
         }
     },
     mounted() {
@@ -147,6 +187,10 @@ export default {
             this.seconds = store.seconds;
             this.minutes = store.minutes;
             this.hours = store.hours;
+            this.money = store.money;
+            this.population = store.totalPop;
+            this.rock = store.rock;
+            this.coal = store.coal;
         }, 1000); // Ogni secondo
     }
 }
@@ -166,6 +210,19 @@ export default {
             <span class="text-white">{{ this.hours.toString().padStart(2, '0') }}:{{ this.minutes.toString().padStart(2,
                 '0')
             }}:{{ this.seconds.toString().padStart(2, '0') }}</span>
+        </div>
+        <span :class="this.BuildMenuColor" @click="TogleBuildMenu()">buildings menu</span>
+        <div v-if="TogleBuildMenuVis" class="buildingsMenu">
+            <img src="../../../public/miniera.png" alt="">
+            <span :class="this.miniera" @click="build('miniera'), TogleMineVis()">
+                miniera</span>
+        </div>
+        <div class="gameStatPannel text-white">
+            <span>pop: {{ this.population }}</span><br>
+            <span>money: {{ this.money }}</span><br>
+            <span>rock: {{ this.rock }}</span><br>
+            <span>coal: {{ this.coal }}</span>
+
         </div>
     </div>
 </template>

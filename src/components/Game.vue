@@ -1,7 +1,7 @@
 <script>
 import WorldMap from './map/WorldMap.vue';
 import Hud from './hud/Hud.vue';
-import { store as vuexStore } from '../store.js'
+import { store, store as vuexStore } from '../store.js'
 
 export default {
   name: "Game",
@@ -16,6 +16,7 @@ export default {
   },
   methods: {
     CurrentTime() {
+      //game clock
       setInterval(() => {
         // Incrementa i secondi
         this.vuexStore.seconds++;
@@ -30,12 +31,29 @@ export default {
           this.vuexStore.hours++;
         }
       }, 1000); // Ogni secondo
+    },
+    FastIntroitProductionClock() {
+      setInterval(() => {
+        this.FastIntroitProduction();
+      }, 3000); // ogni 3 secondi
+    },
+    FastIntroitProduction() {
+      // rock production
+      for (let i = 0; i < this.vuexStore.rockMineNumber; i++) {
+        this.vuexStore.rock++;
+      }
+      // coal production
+      for (let i = 0; i < this.vuexStore.coalMineNumber; i++) {
+        this.vuexStore.coal++;
+      }
     }
   },
   mounted() {
     this.CurrentTime();
+    this.FastIntroitProductionClock();
   }
-}
+};
+
 </script>
 
 <template>
