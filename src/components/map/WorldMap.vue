@@ -5,7 +5,7 @@ export default {
     data() {
         return {
             store,
-            TilesNumber: 3700,
+            grid: ""
         }
     },
     methods: {
@@ -19,13 +19,14 @@ export default {
         }
     },
     created() {
-        for (let i = 0; i < this.TilesNumber; i++) {
-            const randomTypeIndex = Math.floor(Math.random() * 6); // Genera un indice casuale tra 0 e 2
-            const randomType = ['erbosa', 'erbosa', 'erbosa', 'erbosa', 'foresta', 'sopraelevata'][randomTypeIndex]; // Scegli casualmente uno dei tipi
+        for (let i = 0; i < store.TilesNumber; i++) {
+            // const randomTypeIndex = Math.floor(Math.random() * 7); // Genera un indice casuale tra 0 e 2
+            // const randomType = ['erbosa', 'erbosa', 'erbosa', 'erbosa', 'acquosa', 'foresta', 'sopraelevata'][randomTypeIndex]; // Scegli casualmente uno dei tipi
 
             store.tilesInfo.push({
-                type: randomType,
-                pollutionLeve: 0,
+                skin: "erbosa",
+                type: "erbosa",
+                pollutionLevel: 0,
                 structure: "none",
                 fertylity: 100,
                 powered: 0,
@@ -35,21 +36,27 @@ export default {
             });
         }
     },
+    mounted() {
+        setInterval(() => {
+            this.grid = store.grid
+        }, 1000); // Ogni secondo
+    }
 }
 </script>
 
 <template>
     <div id="GameCont">
-        <div class="GameTile" v-for="(tile, index) in store.tilesInfo" :key="index" :class="tile.type"
+        <div class="GameTile" v-for="(tile, index) in store.tilesInfo" :key="index" :class="tile.skin, store.grid"
             @mouseenter="this.tileInfo(index)" @mouseleave="this.tileInfoClose(index)">
             <div class="Tooltip" v-if="tile.TooltipOpen">
                 <div class="text-white">
                     <span>terrain: {{ tile.type }}</span><br>
                     <span>fertility: {{ tile.fertylity }}%</span><br>
-                    <span>pollution: {{ tile.polluted }}%</span><br>
+                    <span>pollution: {{ tile.pollutionLevel }}%</span><br>
                     <span>power level: {{ tile.powered }}%</span><br>
                     <span>burning: {{ tile.burning }}</span><br>
-                    <span>building: {{ tile.structure }}</span>
+                    <span>building: {{ tile.structure }}</span><br>
+                    <span>resource: {{ tile.resourceDeposit }}</span>
                 </div>
             </div>
 
@@ -72,21 +79,38 @@ export default {
     max-height: 1000px;
 
     .GameTile {
-        border: 1px solid black;
+        // border: 1px solid black;
         flex-basis: calc(100% / 100);
         aspect-ratio: 1;
     }
 
     .erbosa {
-        background-color: lightgreen;
+        background-image: url(../../../public/grassnew.png);
+    }
+
+    .acquosa {
+        background-color: #42acaf;
     }
 
     .foresta {
-        background-color: green;
+        background-image: url(../../../public/WinterTrees.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        background-color: #b1d354;
+
     }
 
-    .sopraelevata {
-        background-color: grey;
+    .sabbiosa {
+        background-color: rgb(212, 212, 145);
+    }
+
+    .roccioso {
+        background-image: url(../../../public/Rocks.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        background-color: #b1d354;
     }
 
     .inactive {
@@ -95,12 +119,18 @@ export default {
 
     .Tooltip {
         position: absolute;
-        background-color: rgba(0, 0, 0, 0.5);
+        top: 20px;
+        left: 5px;
+        background-color: rgba(0, 0, 0, 0.8);
         color: white;
         padding: 10px;
         border-radius: 5px;
         z-index: 999; // Assicurati che sia al di sopra delle altre caselle
         pointer-events: none; // Permette al click di passare attraverso il tooltip
+    }
+
+    .border {
+        border: 1px solid black !important
     }
 }
 
