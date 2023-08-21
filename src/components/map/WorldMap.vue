@@ -19,6 +19,14 @@ export default {
         },
         interact(index) {
             //costruzione edifici
+            let tileUpMinusOne = index - 81
+            let tileUp = index - 80
+            let tileUpPlusOne = index - 79
+            let tilePrev = index - 1
+            let tileNext = index + 1
+            let tileDownMinusOne = index + 79
+            let tileDown = index + 80
+            let tileDownPlusOne = index + 81
             if (store.mode === 'build') {
                 if (store.SelectedBuilding === 'miniera' && store.tilesInfo[index].type === 'roccioso') {
                     store.tilesInfo[index].structure.name = 'mine'
@@ -29,7 +37,24 @@ export default {
                     } else {
                         store.rockMineNumber++
                     }
-                } else if (store.SelectedBuilding === 'miniera') {
+                } else if (store.SelectedBuilding === 'woodCutter' && store.tilesInfo[index].type === 'erbosa') {
+                    store.tilesInfo[index].structure.name = 'Wood Cutter'
+                    store.tilesInfo[index].structure.createdAt = `${store.hours}:${store.minutes}:${store.seconds}`
+                    store.tilesInfo[index].skin = 'woodCutter'
+                    store.tilesInfo[tileUpMinusOne].inAreaOf = 'Wood Cutter'
+                    store.tilesInfo[tileUp].inAreaOf = 'Wood Cutter'
+                    store.tilesInfo[tileUpPlusOne].inAreaOf = 'Wood Cutter'
+                    store.tilesInfo[tilePrev].inAreaOf = 'Wood Cutter'
+                    store.tilesInfo[tileNext].inAreaOf = 'Wood Cutter'
+                    store.tilesInfo[tileDownMinusOne].inAreaOf = 'Wood Cutter'
+                    store.tilesInfo[tileDown].inAreaOf = 'Wood Cutter'
+                    store.tilesInfo[tileDownPlusOne].inAreaOf = 'Wood Cutter'
+                } else if (store.SelectedBuilding === 'house' && store.tilesInfo[index].type === 'erbosa') {
+                    store.tilesInfo[index].structure.name = 'House'
+                    store.tilesInfo[index].structure.createdAt = `${store.hours}:${store.minutes}:${store.seconds}`
+                    store.tilesInfo[index].skin = 'house'
+                    store.avviableHousing++
+                } else {
                     store.error = "Edificio posizionabile solo su terreno roccioso"
                     setTimeout(() => {
                         store.error = ""
@@ -81,7 +106,8 @@ export default {
                     <span>power level: {{ tile.powered }}%</span><br>
                     <span>burning: {{ tile.burning }}</span><br>
                     <span>building: {{ tile.structure.name }}</span><br>
-                    <span>resource: {{ tile.resourceDeposit }}</span>
+                    <span>resource: {{ tile.resourceDeposit }}</span><br>
+                    <span>in area of: {{ tile.inAreaOf }}</span>
                 </div>
             </div>
 
@@ -117,6 +143,22 @@ export default {
         // border: 1px solid black;
         flex-basis: calc(100% / 80);
         aspect-ratio: 1;
+    }
+
+    .house {
+        background-image: url(../../../public/house.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        background-color: #b1d354;
+    }
+
+    .woodCutter {
+        background-image: url(../../../public/WoodCutter.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        background-color: #b1d354;
     }
 
     .mine {
@@ -161,7 +203,7 @@ export default {
     }
 
     .Tooltip {
-        position: absolute;
+        position: fixed;
         top: 20px;
         left: 5px;
         background-color: rgba(0, 0, 0, 0.8);

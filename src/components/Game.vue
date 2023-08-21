@@ -46,6 +46,13 @@ export default {
       for (let i = 0; i < this.vuexStore.coalMineNumber; i++) {
         this.vuexStore.coal++;
       }
+
+      for (let i = 0; i < this.vuexStore.TilesNumber; i++) {
+        if (this.vuexStore.tilesInfo[i].inAreaOf === 'Wood Cutter' && this.vuexStore.tilesInfo[i].type === 'foresta') {
+          this.vuexStore.wood++;
+          console.log('ciao')
+        }
+      }
     }
   },
   mounted() {

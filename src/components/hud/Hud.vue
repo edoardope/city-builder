@@ -11,13 +11,18 @@ export default {
             hours: "",
             money: 0,
             population: 0,
+            avviableHousing: 0,
             rock: 0,
             coal: 0,
+            wood: 0,
             ToggleInfoStatus: "text-white",
             ToggleGrid: "text-white",
             TogleBuildMenuVis: false,
             BuildMenuColor: "text-white",
-            miniera: "text-white"
+            miniera: "text-white",
+            woodCutter: "text-white",
+            house: "text-white"
+
         }
     },
     methods: {
@@ -101,14 +106,17 @@ export default {
                     }
                 }
 
-
-                const randomResourceIndex = Math.floor(Math.random() * 10);
-                if (randomResourceIndex === 5) {
-                    TileResource = 'petrolio'
-                } else if (randomResourceIndex === 6) {
-                    TileResource = 'uranio'
-                } else if (randomResourceIndex === 7 || randomResourceIndex === 8) {
-                    TileResource = 'carbone'
+                if (randomType === "roccioso") {
+                    const randomResourceIndex = Math.floor(Math.random() * 10);
+                    if (randomResourceIndex === 5) {
+                        TileResource = 'petrolio'
+                    } else if (randomResourceIndex === 6) {
+                        TileResource = 'uranio'
+                    } else if (randomResourceIndex === 7 || randomResourceIndex === 8) {
+                        TileResource = 'carbone'
+                    } else {
+                        TileResource = 'none'
+                    }
                 } else {
                     TileResource = 'none'
                 }
@@ -125,6 +133,7 @@ export default {
                         name: "none",
                         createdAt: ""
                     },
+                    inAreaOf: "none",
                     fertylity: 100,
                     powered: 0,
                     burning: "no",
@@ -183,9 +192,34 @@ export default {
         TogleMineVis() {
             if (this.miniera === 'text-white') {
                 this.miniera = 'text-danger'
+                this.woodCutter = 'text-white'
+                this.house = 'text-white'
             } else {
                 this.miniera = 'text-white'
                 store.SelectedBuilding = ''
+                store.mode = ""
+            }
+        },
+        TogleWoodCutterVis() {
+            if (this.woodCutter === 'text-white') {
+                this.woodCutter = 'text-danger'
+                this.miniera = 'text-white'
+                this.house = 'text-white'
+            } else {
+                this.woodCutter = 'text-white'
+                store.SelectedBuilding = ''
+                store.mode = ""
+            }
+        },
+        TogleHouseVis() {
+            if (this.house === 'text-white') {
+                this.house = 'text-danger'
+                this.miniera = 'text-white'
+                this.woodCutter = 'text-white'
+            } else {
+                this.house = 'text-white'
+                store.SelectedBuilding = ''
+                store.mode = ''
             }
         }
     },
@@ -199,6 +233,8 @@ export default {
             this.population = store.totalPop;
             this.rock = store.rock;
             this.coal = store.coal;
+            this.wood = store.wood;
+            this.avviableHousing = store.avviableHousing;
         }, 1000); // Ogni secondo
     }
 }
@@ -229,14 +265,25 @@ export default {
             <div v-if="TogleBuildMenuVis" class="buildingsMenu">
                 <img src="../../../public/miniera.png" alt="">
                 <span :class="this.miniera" @click="build('miniera'), TogleMineVis()">
-                    miniera</span>
+                    miniera
+                </span>
+                <img src="../../../public/WoodCutter.png" alt="">
+                <span :class="this.woodCutter" @click="build('woodCutter'), TogleWoodCutterVis()">
+                    wood cutter
+                </span>
+                <img src="../../../public/House.png" alt="">
+                <span :class="this.house" @click="build('house'), TogleHouseVis()">
+                    house
+                </span>
             </div>
         </div>
         <div class="gameStatPannel text-white">
-            <span>pop: {{ this.population }}</span>
-            <span>money: {{ this.money }}</span>
-            <span>rock: {{ this.rock }}</span>
-            <span>coal: {{ this.coal }}</span>
+            <span>pop: {{ this.population }} </span>
+            <span> avviable house: {{ this.avviableHousing }}</span>
+            <span> money: {{ this.money }} </span>
+            <span> rock: {{ this.rock }} </span>
+            <span> coal: {{ this.coal }} </span>
+            <span> wood: {{ this.wood }} </span>
 
         </div>
     </div>
@@ -264,7 +311,7 @@ export default {
         display: flex;
         bottom: 0px;
         right: 20px;
-        width: 300px;
+        width: 500px;
         justify-content: space-between;
     }
 

@@ -2,7 +2,6 @@ import { reactive } from 'vue'
 
 export const store = reactive({
     TilesNumber: 5000,
-    TilesNumber: 50,
     gameStarted: false,
     hours: 0,
     minutes: 0,
@@ -14,6 +13,7 @@ export const store = reactive({
     grid: "",
     error: "",
     //buildings control
+    avviableHousing: 0,
     rockMineNumber: 0,
     coalMineNumber: 0,
     //resource and money
