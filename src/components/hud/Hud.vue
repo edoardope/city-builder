@@ -224,6 +224,7 @@ export default {
                 '0')
             }}:{{ this.seconds.toString().padStart(2, '0') }}</span>
         </div>
+<<<<<<< HEAD
         <div id="buildingMenuCont">
             <span :class="this.BuildMenuColor" @click="TogleBuildMenu()">buildings menu</span>
             <div v-if="TogleBuildMenuVis" class="buildingsMenu">
@@ -236,6 +237,18 @@ export default {
             <span>pop: {{ this.population }}</span>
             <span>money: {{ this.money }}</span>
             <span>rock: {{ this.rock }}</span>
+=======
+        <span :class="this.BuildMenuColor" @click="TogleBuildMenu()">buildings menu</span>
+        <div v-if="TogleBuildMenuVis" class="buildingsMenu">
+            <img src="../../../public/miniera.png" alt="">
+            <span :class="this.miniera" @click="build('miniera'), TogleMineVis()">
+                miniera</span>
+        </div>
+        <div class="gameStatPannel text-white">
+            <span>pop: {{ this.population }}</span><br>
+            <span>money: {{ this.money }}</span><br>
+            <span>rock: {{ this.rock }}</span><br>
+>>>>>>> 61208d178562b511b04e85c1fd6a648922528870
             <span>coal: {{ this.coal }}</span>
 
         </div>
