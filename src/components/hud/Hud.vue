@@ -21,7 +21,8 @@ export default {
             BuildMenuColor: "text-white",
             miniera: "text-white",
             woodCutter: "text-white",
-            house: "text-white"
+            house: "text-white",
+            road: "text-white"
 
         }
     },
@@ -130,7 +131,7 @@ export default {
                     type: randomType,
                     pollutionLevel: 0,
                     structure: {
-                        name: "none",
+                        name: false,
                         createdAt: ""
                     },
                     inAreaOf: "none",
@@ -139,7 +140,13 @@ export default {
                     burning: "no",
                     polluted: false,
                     TooltipOpen: false,
-                    resourceDeposit: TileResource
+                    resourceDeposit: TileResource,
+                    road: {
+                        isThisARoad: false,
+                        nearBuildingInTiles: [],
+                        connectedToBuildingsInTiles: [],
+                        numberOfConnectedBuildings: 0
+                    }
                 });
             }
         },
@@ -159,7 +166,7 @@ export default {
                     burning: "no",
                     polluted: false,
                     TooltipOpen: false,
-                    resourceDeposit: ""
+                    resourceDeposit: "",
                 });
             }
         },
@@ -194,6 +201,7 @@ export default {
                 this.miniera = 'text-danger'
                 this.woodCutter = 'text-white'
                 this.house = 'text-white'
+                this.road = 'text-white'
             } else {
                 this.miniera = 'text-white'
                 store.SelectedBuilding = ''
@@ -205,6 +213,7 @@ export default {
                 this.woodCutter = 'text-danger'
                 this.miniera = 'text-white'
                 this.house = 'text-white'
+                this.road = 'text-white'
             } else {
                 this.woodCutter = 'text-white'
                 store.SelectedBuilding = ''
@@ -216,8 +225,21 @@ export default {
                 this.house = 'text-danger'
                 this.miniera = 'text-white'
                 this.woodCutter = 'text-white'
+                this.road = 'text-white'
             } else {
                 this.house = 'text-white'
+                store.SelectedBuilding = ''
+                store.mode = ''
+            }
+        },
+        TogleRoadVis() {
+            if (this.road === 'text-white') {
+                this.road = 'text-danger'
+                this.house = 'text-white'
+                this.woodCutter = 'text-white'
+                this.miniera = 'text-white'
+            } else {
+                this.road = 'text-white'
                 store.SelectedBuilding = ''
                 store.mode = ''
             }
@@ -274,6 +296,10 @@ export default {
                 <img src="../../../public/House.png" alt="">
                 <span :class="this.house" @click="build('house'), TogleHouseVis()">
                     house
+                </span>
+                <img src="../../../public/orizontal_road.png" alt="">
+                <span :class="this.road" @click="build('road'), TogleRoadVis()">
+                    road
                 </span>
             </div>
         </div>

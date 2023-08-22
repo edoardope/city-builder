@@ -54,6 +54,10 @@ export default {
                     store.tilesInfo[index].structure.createdAt = `${store.hours}:${store.minutes}:${store.seconds}`
                     store.tilesInfo[index].skin = 'house'
                     store.avviableHousing++
+                } else if (store.SelectedBuilding === 'road' && store.tilesInfo[index].type === 'erbosa') {
+                    store.tilesInfo[index].structure.name = 'Road'
+                    store.tilesInfo[index].skin = 'road'
+                    store.tilesInfo[index].road.isThisARoad = true
                 } else {
                     store.error = "Edificio posizionabile solo su terreno roccioso"
                     setTimeout(() => {
@@ -143,6 +147,14 @@ export default {
         // border: 1px solid black;
         flex-basis: calc(100% / 80);
         aspect-ratio: 1;
+    }
+
+    .road {
+        background-image: url(../../../public/orizontal_road.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        background-color: #b1d354;
     }
 
     .house {
