@@ -146,6 +146,11 @@ export default {
           }
         }
       }
+    },
+    avviaRiproduzione() {
+      var audioElement = document.getElementById("myAudio");
+      audioElement.muted = false;
+      audioElement.play();
     }
   },
   mounted() {
@@ -158,7 +163,10 @@ export default {
 
 <template>
   <main>
-    <WorldMap />
+    <audio muted loop id="myAudio">
+      <source src="../../public/nature.mp3" type="audio/mpeg">
+    </audio>
+    <WorldMap @click="avviaRiproduzione()" />
     <Hud />
   </main>
 </template>
