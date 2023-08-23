@@ -127,6 +127,7 @@ export default {
                 const skin = randomType;
 
                 store.tilesInfo.push({
+                    coordinates: i,
                     skin: skin,
                     type: randomType,
                     pollutionLevel: 0,
@@ -145,7 +146,7 @@ export default {
                         isThisARoad: false,
                         nearBuildingInTiles: [],
                         connectedToBuildingsInTiles: [],
-                        numberOfConnectedBuildings: 0
+                        numberOfConnectedBuildings: 0,
                     }
                 });
             }

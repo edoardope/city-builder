@@ -104,6 +104,7 @@ export default {
             @mouseenter="this.tileInfo(index)" @mouseleave="this.tileInfoClose(index)" @click="interact(index)">
             <div class="Tooltip" v-if="tile.TooltipOpen">
                 <div class="text-white">
+                    <span>coordinates: {{ tile.coordinates }}</span><br>
                     <span>terrain: {{ tile.type }}</span><br>
                     <span>fertility: {{ tile.fertylity }}%</span><br>
                     <span>pollution: {{ tile.pollutionLevel }}%</span><br>
@@ -111,7 +112,8 @@ export default {
                     <span>burning: {{ tile.burning }}</span><br>
                     <span>building: {{ tile.structure.name }}</span><br>
                     <span>resource: {{ tile.resourceDeposit }}</span><br>
-                    <span>in area of: {{ tile.inAreaOf }}</span>
+                    <span>in area of: {{ tile.inAreaOf }}</span><br>
+                    <span>road info: {{ tile.road }}</span>
                 </div>
             </div>
 

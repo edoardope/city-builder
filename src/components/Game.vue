@@ -67,32 +67,82 @@ export default {
         let tileDown = i + 80
         let tileDownPlusOne = i + 81
         if (this.vuexStore.tilesInfo[i].road.isThisARoad === true) {
+          //buildings near roads
           if (!this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.includes(tileUp)) {
             if (this.vuexStore.tilesInfo[tileUp].structure.name) {
-              this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
-              this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.push(tileUp)
+              if (!this.vuexStore.tilesInfo[tileUp].road.isThisARoad) {
+                this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
+                this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.push(tileUp)
+                this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.push(tileUp)
+              }
             }
           }
 
           if (!this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.includes(tilePrev)) {
             if (this.vuexStore.tilesInfo[tilePrev].structure.name) {
-              this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
-              this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.push(tilePrev)
+              if (!this.vuexStore.tilesInfo[tilePrev].road.isThisARoad) {
+                this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
+                this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.push(tilePrev)
+                this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.push(tilePrev)
+              }
             }
           }
 
           if (!this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.includes(tileNext)) {
             if (this.vuexStore.tilesInfo[tileNext].structure.name) {
-              this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
-              this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.push(tileNext)
+              if (!this.vuexStore.tilesInfo[tileNext].road.isThisARoad) {
+                this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
+                this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.push(tileNext)
+                this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.push(tileNext)
+              }
             }
           }
 
           if (!this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.includes(tileDown)) {
             if (this.vuexStore.tilesInfo[tileDown].structure.name) {
-              this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
-              this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.push(tileDown)
+              if (!this.vuexStore.tilesInfo[tileDown].road.isThisARoad) {
+                this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
+                this.vuexStore.tilesInfo[i].road.nearBuildingInTiles.push(tileDown)
+                this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.push(tileDown)
+              }
             }
+          }
+
+          //buildings connection not near
+          if (this.vuexStore.tilesInfo[tileUp].road.isThisARoad) {
+            this.vuexStore.tilesInfo[tileUp].road.connectedToBuildingsInTiles.forEach(element => {
+              if (!this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.includes(element)) {
+                this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.push(element)
+                this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
+              }
+            });
+          }
+
+          if (this.vuexStore.tilesInfo[tilePrev].road.isThisARoad) {
+            this.vuexStore.tilesInfo[tilePrev].road.connectedToBuildingsInTiles.forEach(element => {
+              if (!this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.includes(element)) {
+                this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.push(element)
+                this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
+              }
+            });
+          }
+
+          if (this.vuexStore.tilesInfo[tileNext].road.isThisARoad) {
+            this.vuexStore.tilesInfo[tileNext].road.connectedToBuildingsInTiles.forEach(element => {
+              if (!this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.includes(element)) {
+                this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.push(element)
+                this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
+              }
+            });
+          }
+
+          if (this.vuexStore.tilesInfo[tileDown].road.isThisARoad) {
+            this.vuexStore.tilesInfo[tileDown].road.connectedToBuildingsInTiles.forEach(element => {
+              if (!this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.includes(element)) {
+                this.vuexStore.tilesInfo[i].road.connectedToBuildingsInTiles.push(element)
+                this.vuexStore.tilesInfo[i].road.numberOfConnectedBuildings++
+              }
+            });
           }
         }
       }
